@@ -1,0 +1,43 @@
+﻿@model CrudApp1.Models.Viewmodels.CreateProdVm
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+
+<div class="container">
+
+    <h2 class="text-center p-5 bg-dark text-light">Create Product</h2>
+    <form method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col">
+                <div class="row mb-3">
+                    <label class="form-label">Product Name</label>
+                    <input type="text" class="form-control" id="name" asp-for="Name" />
+                </div>
+            
+           
+                <div class="row mb-3">
+                    <label class="form-label">Unit Price</label>
+                    <input type="number" class="form-control" id="price" asp-for="UnitPrice" />
+                </div>
+            
+                <div class="row mb-3">
+                    <label class="form-label">In Stock</label>
+                    <input type="number" class="form-control" id="instock" asp-for="UnitInStock" />
+                </div>
+            </div>
+            <div class="col ms-5">
+                <label class="form-label"> Product Image</label>
+                <div class="imagebox">
+                    <img src="@Url.Content("~/Images/imgUpload.png")" alt="Alternate Text" />
+                    <input type="file" asp-for="ImageUrl" />
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+</div>
+
+

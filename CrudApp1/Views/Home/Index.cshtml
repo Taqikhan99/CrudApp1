@@ -1,0 +1,52 @@
+﻿@model List<CrudApp1.Models.Viewmodels.ProductViewModel>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1>
+        Welcome To Crud App
+    </h1>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="container  p-3">
+
+            <h3 class="text-center">PRODUCTS LIST</h3>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Unit Price</th>
+                        <th>In Stock</th>
+                        <th>Image</th>
+                        <th></th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    @foreach(var p in Model)
+                {
+                    <tr>
+                        <td>@p.Name</td>
+                        <td>@p.UnitPrice</td>
+                        <td>@p.UnitInStock</td>
+                        <td><img src="@p.ImageUrl" alt="No Image found" /></td>
+                    </tr>
+                }
+
+                </tbody>
+            </table>
+
+        </div>
+    }
+else
+            {
+                <h4 class="text-danger">No Products Available</h4>
+            }
+
+
+
+
+</div>
