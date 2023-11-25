@@ -10,6 +10,6 @@ namespace CrudApp1.Models.Viewmodels
         public int UnitPrice { get; set; }
         [Required]
         public int UnitInStock { get; set; }
-        public string ImageUrl { get; set; }
+        public IFormFile ImageFile { get; set; }
     }
 }

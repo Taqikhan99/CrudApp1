@@ -26,6 +26,8 @@ namespace CrudApp1.Profiles
 
 
             CreateMap<Product, ProductViewModel>().ReverseMap();
+
+            CreateMap<CreateProdVm, Product>().ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
         }
     }
 }

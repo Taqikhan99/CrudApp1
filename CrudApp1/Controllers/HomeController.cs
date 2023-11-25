@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace CrudApp1.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IMapper mapper;
@@ -43,7 +43,35 @@ namespace CrudApp1.Controllers
         {
            return View();
         }
-        
+
+        //Creating post controller
+        [HttpPost]
+        public IActionResult Create(CreateProdVm productreq)
+        {
+            try
+            {
+                if(ModelState.IsValid)
+                {
+                    //first map vm to actual model
+                    var product = mapper.Map<Product>(productreq);
+
+                    bool created = productRepo.AddProduct(product);
+
+                    if(created)
+                    {
+                        Alert("New Product Added", Enum.NotificationType.success);
+                        return RedirectToAction("Index");
+                    }
+                    Alert("Unable to Add product", Enum.NotificationType.error);
+                }
+                return View(productreq);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex);
+            }
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -1,0 +1,9 @@
+Created a model class for products
+Created Dbcontext
+Add connection string 
+Register dbcontext in program.cs file
+Created Repository for Product
+Created Product Viewmodel
+installed Automapper and map model class to view model class
+Display products on home page
+Creating a  new product

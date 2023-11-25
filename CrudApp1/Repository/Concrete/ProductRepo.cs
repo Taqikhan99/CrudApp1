@@ -14,6 +14,15 @@ namespace CrudApp1.Repository.Concrete
             this.dbContext = dbContext;
         }
 
+        //adding a product
+        public bool AddProduct(Product product)
+        {
+            dbContext.Products.Add(product);
+            if(dbContext.SaveChanges()>0)  
+                return true;
+            return false;
+        }
+
         public List<Product> GetProducts()
         {
             var result=  dbContext.Products.ToList();

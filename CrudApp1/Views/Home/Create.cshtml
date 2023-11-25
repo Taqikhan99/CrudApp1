@@ -14,17 +14,26 @@
                 <div class="row mb-3">
                     <label class="form-label">Product Name</label>
                     <input type="text" class="form-control" id="name" asp-for="Name" />
+                    @* add validations *@
+                    <span class="text-danger" asp-validation-for="Name"></span>
                 </div>
             
            
                 <div class="row mb-3">
                     <label class="form-label">Unit Price</label>
                     <input type="number" class="form-control" id="price" asp-for="UnitPrice" />
+                    <span class="text-danger" asp-validation-for="UnitPrice"></span>
                 </div>
             
                 <div class="row mb-3">
                     <label class="form-label">In Stock</label>
                     <input type="number" class="form-control" id="instock" asp-for="UnitInStock" />
+                    <span class="text-danger" asp-validation-for="UnitInStock"></span>
+                </div>
+                
+                <div class="row mb-3">
+                    
+                    <input type="submit" class="btn btn-primary" value="Create"  />
                 </div>
             </div>
             <div class="col ms-5">
