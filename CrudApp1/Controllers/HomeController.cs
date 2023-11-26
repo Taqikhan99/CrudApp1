@@ -12,12 +12,14 @@ namespace CrudApp1.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IMapper mapper;
         private readonly IProductRepo productRepo;
+        private readonly FileService fileService;
 
-        public HomeController(ILogger<HomeController> logger, IMapper mapper, IProductRepo productRepo)
+        public HomeController(ILogger<HomeController> logger, IMapper mapper, IProductRepo productRepo, FileService fileService)
         {
             _logger = logger;
             this.mapper = mapper;
             this.productRepo = productRepo;
+            this.fileService = fileService;
         }
 
         public IActionResult Index()
@@ -53,7 +55,9 @@ namespace CrudApp1.Controllers
                 if(ModelState.IsValid)
                 {
                     //first map vm to actual model
+                    string imagePath=fileService.UploadImage(productreq.ImageFile);
                     var product = mapper.Map<Product>(productreq);
+                    product.ImageUrl=imagePath;
 
                     bool created = productRepo.AddProduct(product);
 

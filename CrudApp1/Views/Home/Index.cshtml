@@ -3,6 +3,14 @@
     ViewData["Title"] = "Home Page";
 }
 
+<style>
+    table > tbody > tr {
+        vertical-align: middle;
+    }
+
+
+</style>
+
 <div class="text-center">
     <h1>
         Welcome To Crud App
@@ -21,7 +29,7 @@
                         <th>Unit Price</th>
                         <th>In Stock</th>
                         <th>Image</th>
-                        <th></th>
+                        <th>Options</th>
                     </tr>
 
                 </thead>
@@ -32,7 +40,12 @@
                         <td>@p.Name</td>
                         <td>@p.UnitPrice</td>
                         <td>@p.UnitInStock</td>
-                        <td><img src="@p.ImageUrl" alt="No Image found" /></td>
+                        <td><img src="@p.ImageUrl" width="50" alt="No Image found" /></td>
+                        <td>
+                            <button class="btn btn-primary">Edit</button>
+                            <button class="btn btn-danger" asp-route-id="" >Delete</button>
+                        </td>
+                        
                     </tr>
                 }
 

@@ -3,19 +3,36 @@ namespace CrudApp1
 {
     public class FileService
     {
-        private readonly IWebHostEnvironment environment;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public FileService(IWebHostEnvironment environment)
+        public FileService(IWebHostEnvironment webHostEnvironment)
         {
-            this.environment = environment;
+            _webHostEnvironment = webHostEnvironment;
         }
+
         public string UploadImage(IFormFile file)
         {
+            //var rootPath = _webHostEnvironment.ContentRootPath;
 
-            var filePath = Path.Combine(environment.ContentRootPath, "Images",file.FileName,"_",DateTime.Now.ToShortDateString());
+            var relativePath = "/Images/";
+            var folderpath = Path.Combine(_webHostEnvironment.ContentRootPath,"wwwroot", "Images");
+            //var folderpath = Path.Combine(@"wwwroot", "Images");
+
+            if (!Directory.Exists(folderpath))
+            {
+                Directory.CreateDirectory(folderpath);
+            }
+            //DateTime.Now.ToString("dd-MM-yyyy") + "_" +
+
+            var uniqueFileName =  Path.GetFileName(file.FileName) ;
+            var filePath = Path.Combine(folderpath, uniqueFileName);
+
             using var fileStream = new FileStream(filePath, FileMode.Create);
             file.CopyTo(fileStream);
-            return filePath;
+
+            relativePath += uniqueFileName;
+
+            return relativePath;
 
         }
     }

@@ -36,11 +36,13 @@
                     <input type="submit" class="btn btn-primary" value="Create"  />
                 </div>
             </div>
-            <div class="col ms-5">
-                <label class="form-label"> Product Image</label>
+            <div class="col text-center ms-5">
+                <h5 class="form-label  fw-bold"> Product Image</h5>
                 <div class="imagebox">
-                    <img src="@Url.Content("~/Images/imgUpload.png")" alt="Alternate Text" />
-                    <input type="file" asp-for="ImageUrl" />
+                    <img src="@Url.Content("~/Images/imgUpload.png")" width="250" id="imageShown" alt="Alternate Text" />
+                    <br />
+                    <br />
+                    <input type="file" id="inputfile" onchange="onFileChange()" name="ImageFile" asp-for="ImageFile" />
                 </div>
             </div>
 
@@ -49,4 +51,40 @@
 
 </div>
 
+
+<script>
+
+    
+
+    function onFileChange() {
+        var imgbox=document.getElementById('imageShown')
+        var inputElem = document.getElementById('inputfile')
+
+        console.log('file changed')
+        if (inputElem.files && inputElem.files[0]) {
+
+            //reading and showing image using the URL.createObjectURL
+
+            //console.log(URL.createObjectURL(inputElem.files[0]))
+            //imgbox.src = URL.createObjectURL(inputElem.files[0])
+
+
+            //reading and showing image using the filereader
+
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                // Set the 'src' attribute of an img element
+                var imageDataURL = e.target.result;
+                
+                imgbox.src = imageDataURL;
+            };
+            reader.readAsDataURL(inputElem.files[0]);
+        }
+
+        
+    }
+    
+
+</script>
 

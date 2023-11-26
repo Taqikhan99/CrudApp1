@@ -1,5 +1,6 @@
 
 
+using CrudApp1;
 using CrudApp1.DAL;
 using CrudApp1.Repository.Abstract;
 using CrudApp1.Repository.Concrete;
@@ -19,7 +20,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 //add repository service
 builder.Services.AddScoped<IProductRepo,ProductRepo>();
-
+builder.Services.AddScoped<FileService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

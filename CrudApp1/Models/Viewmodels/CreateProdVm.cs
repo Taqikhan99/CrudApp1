@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.ComponentModel.DataAnnotations;
 
 namespace CrudApp1.Models.Viewmodels
 {
@@ -10,6 +11,8 @@ namespace CrudApp1.Models.Viewmodels
         public int UnitPrice { get; set; }
         [Required]
         public int UnitInStock { get; set; }
+
+        //[BindNever]//ignore this
         public IFormFile ImageFile { get; set; }
     }
 }
