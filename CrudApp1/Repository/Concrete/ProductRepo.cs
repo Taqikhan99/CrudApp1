@@ -23,11 +23,37 @@ namespace CrudApp1.Repository.Concrete
             return false;
         }
 
+        public Product GetProductById(int id)
+        {
+            var prod = dbContext.Products.FirstOrDefault(x => x.Id == id);
+            return prod;
+        }
+
         public List<Product> GetProducts()
         {
             var result=  dbContext.Products.ToList();
       
             return result;
+        }
+
+        public bool UpdateProduct(Product product)
+        {
+            var dbProd = dbContext.Products.FirstOrDefault(y => y.Id == product.Id);
+
+            if (dbProd != null)
+            {
+                dbProd.Name = product.Name; dbProd.UnitInStock = product.UnitInStock; 
+                dbProd.UnitPrice=product.UnitPrice;
+                if(product.ImageUrl!=null)
+                    dbProd.ImageUrl=product.ImageUrl;
+
+
+
+                dbContext.SaveChanges();
+
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -7,3 +7,4 @@ Created Product Viewmodel
 installed Automapper and map model class to view model class
 Display products on home page
 Creating a  new product
+Added a file service class to handle file upload

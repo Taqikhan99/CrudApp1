@@ -2,6 +2,7 @@
 using CrudApp1.Models;
 using CrudApp1.Models.Viewmodels;
 using CrudApp1.Repository.Abstract;
+using CrudApp1.Repository.Concrete;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -75,6 +76,58 @@ namespace CrudApp1.Controllers
                 return Json(ex);
             }
         }
+
+        //Edit method
+        public IActionResult Edit(int Id)
+        {
+            var product = productRepo.GetProductById(Id);
+            if(product == null)
+            {
+                Alert("No product found",Enum.NotificationType.error);
+                return View("Index");
+            }
+
+            var productVm = mapper.Map<EditProdVm>(product);
+
+            return View(productVm);
+            
+        }
+
+        [HttpPost]
+        public IActionResult Edit(EditProdVm editProd)
+        {
+
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    //first map vm to actual model
+                    var product = mapper.Map<Product>(editProd);
+                    if (editProd.ImageFile != null && editProd.ImageFile.Length > 0)
+                    {
+                        string imagePath = fileService.UploadImage(editProd.ImageFile);
+                        product.ImageUrl = imagePath;
+                    }
+
+                    bool created = productRepo.UpdateProduct(product);
+
+                    if (created)
+                    {
+                        Alert("Product Updated", Enum.NotificationType.success);
+                        return RedirectToAction("Index");
+                    }
+                    Alert("Unable to Update product", Enum.NotificationType.error);
+                }
+                return View(editProd);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex);
+            }
+
+        }
+
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

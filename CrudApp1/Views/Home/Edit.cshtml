@@ -1,0 +1,89 @@
+﻿@model CrudApp1.Models.Viewmodels.EditProdVm
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="container">
+
+    <h2 class="text-center p-5 bg-dark text-light">Edit Product</h2>
+    <form asp-action="Edit" asp-controller="Home" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col">
+                <div class="row mb-3">
+                    <label class="form-label">Product Name</label>
+                    <input type="text" class="form-control" id="name" asp-for="Name"  value="@Model.Name" />
+                    @* add validations *@
+                    <span class="text-danger" asp-validation-for="Name"></span>
+                </div>
+
+
+                <div class="row mb-3">
+                    <label class="form-label">Unit Price</label>
+                    <input type="number" class="form-control" id="price" asp-for="UnitPrice"  value="@Model.UnitPrice" />
+                    <span class="text-danger" asp-validation-for="UnitPrice"></span>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="form-label">In Stock</label>
+                    <input type="number" class="form-control" id="instock" asp-for="UnitInStock"  value="@Model.UnitInStock"/>
+                    <span class="text-danger" asp-validation-for="UnitInStock"></span>
+                </div>
+
+                <div class="row mb-3">
+
+                    <input type="submit" class="btn btn-primary" value="Update" />
+                </div>
+            </div>
+            <div class="col text-center ms-5">
+                <h5 class="form-label  fw-bold"> Product Image</h5>
+                <div class="imagebox">
+                    
+                    <img src="@Url.Content(Model.ImageUrl)" width="250" id="imageShown" alt="Alternate Text" />
+                    <br />
+                    <br />
+                    <input type="file" id="inputfile" onchange="onFileChange()" name="ImageFile" asp-for="ImageFile" />
+                    <input type="hidden" asp-for="Id"/>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+</div>
+
+
+    
+<script>
+    function onFileChange() {
+        var imgbox=document.getElementById('imageShown')
+        var inputElem = document.getElementById('inputfile')
+
+        console.log('file changed')
+        if (inputElem.files && inputElem.files[0]) {
+
+            //reading and showing image using the URL.createObjectURL
+
+            //console.log(URL.createObjectURL(inputElem.files[0]))
+            //imgbox.src = URL.createObjectURL(inputElem.files[0])
+
+
+            //reading and showing image using the filereader
+
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                // Set the 'src' attribute of an img element
+                var imageDataURL = e.target.result;
+                
+                imgbox.src = imageDataURL;
+            };
+            reader.readAsDataURL(inputElem.files[0]);
+        }
+
+        
+    }
+    
+
+</script>
+
+

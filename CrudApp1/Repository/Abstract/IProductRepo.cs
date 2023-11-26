@@ -7,5 +7,10 @@ namespace CrudApp1.Repository.Abstract
         List<Product> GetProducts();
 
         bool AddProduct(Product product);
+
+        Product GetProductById(int id);
+
+        bool UpdateProduct(Product product);
+
     }
 }

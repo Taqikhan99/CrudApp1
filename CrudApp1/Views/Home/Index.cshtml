@@ -42,8 +42,8 @@
                         <td>@p.UnitInStock</td>
                         <td><img src="@p.ImageUrl" width="50" alt="No Image found" /></td>
                         <td>
-                            <button class="btn btn-primary">Edit</button>
-                            <button class="btn btn-danger" asp-route-id="" >Delete</button>
+                            <a asp-action="Edit" asp-controller="Home" class="btn btn-primary" asp-route-id="@p.Id">Edit</a>
+                            <a class="btn btn-danger" asp-route-id="@p.Id" >Delete</a>
                         </td>
                         
                     </tr>
