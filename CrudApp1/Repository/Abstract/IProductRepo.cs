@@ -12,5 +12,6 @@ namespace CrudApp1.Repository.Abstract
 
         bool UpdateProduct(Product product);
 
+        bool DeleteProduct(int id);
     }
 }

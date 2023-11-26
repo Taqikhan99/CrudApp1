@@ -128,6 +128,26 @@ namespace CrudApp1.Controllers
 
         }
 
+        //Delete method
+        public IActionResult Delete(int Id) 
+        {
+            try
+            {
+                var deleted = productRepo.DeleteProduct(Id);
+                if(deleted)
+                {
+                    Alert("Product Deleted Successfully", Enum.NotificationType.success);
+                    return RedirectToAction("Index");
+                }
+                return RedirectToAction("Index");
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
+        }
+
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

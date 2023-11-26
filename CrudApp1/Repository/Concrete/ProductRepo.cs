@@ -23,6 +23,18 @@ namespace CrudApp1.Repository.Concrete
             return false;
         }
 
+        public bool DeleteProduct(int id)
+        {
+            var dbProduct = GetProductById(id);
+            if(dbProduct != null )
+            {
+                dbContext.Products.Remove(dbProduct);
+                dbContext.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
         public Product GetProductById(int id)
         {
             var prod = dbContext.Products.FirstOrDefault(x => x.Id == id);
