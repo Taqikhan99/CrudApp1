@@ -4,6 +4,7 @@ using CrudApp1;
 using CrudApp1.DAL;
 using CrudApp1.Repository.Abstract;
 using CrudApp1.Repository.Concrete;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,17 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 //add repository service
 builder.Services.AddScoped<IProductRepo,ProductRepo>();
 builder.Services.AddScoped<FileService>();
+
+//register identity
+builder.Services.AddIdentity<IdentityUser,IdentityRole>(
+    options =>
+    {
+        options.Password.RequireNonAlphanumeric=false;
+        options.Password.RequiredLength = 8;
+    }
+    )
+    .AddEntityFrameworkStores<AppDbContext>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,6 +48,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+//add authentication middleware
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

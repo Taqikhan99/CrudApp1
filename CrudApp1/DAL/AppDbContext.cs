@@ -1,9 +1,10 @@
 ﻿using CrudApp1.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CrudApp1.DAL
 {
-    public class AppDbContext:DbContext
+    public class AppDbContext:IdentityDbContext
     {
         public AppDbContext(DbContextOptions options) : base(options)
         {
@@ -11,5 +12,9 @@ namespace CrudApp1.DAL
 
         public DbSet<Product> Products { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+        }
     }
 }

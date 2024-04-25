@@ -76,7 +76,7 @@ namespace CrudApp1.Controllers
                 return Json(ex);
             }
         }
-
+        
         //Edit method
         public IActionResult Edit(int Id)
         {
