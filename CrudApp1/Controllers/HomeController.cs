@@ -3,6 +3,7 @@ using CrudApp1.Models;
 using CrudApp1.Models.Viewmodels;
 using CrudApp1.Repository.Abstract;
 using CrudApp1.Repository.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -41,7 +42,7 @@ namespace CrudApp1.Controllers
             
         }
 
-
+        [Authorize]
         public IActionResult Create()
         {
            return View();
@@ -49,6 +50,7 @@ namespace CrudApp1.Controllers
 
         //Creating post controller
         [HttpPost]
+        [Authorize]
         public IActionResult Create(CreateProdVm productreq)
         {
             try
@@ -76,8 +78,9 @@ namespace CrudApp1.Controllers
                 return Json(ex);
             }
         }
-        
+
         //Edit method
+        [Authorize]
         public IActionResult Edit(int Id)
         {
             var product = productRepo.GetProductById(Id);
@@ -92,7 +95,7 @@ namespace CrudApp1.Controllers
             return View(productVm);
             
         }
-
+        [Authorize]
         [HttpPost]
         public IActionResult Edit(EditProdVm editProd)
         {
@@ -129,6 +132,7 @@ namespace CrudApp1.Controllers
         }
 
         //Delete method
+        [Authorize]
         public IActionResult Delete(int Id) 
         {
             try

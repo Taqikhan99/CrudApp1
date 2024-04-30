@@ -2,6 +2,7 @@
 
 using CrudApp1;
 using CrudApp1.DAL;
+using CrudApp1.Models;
 using CrudApp1.Repository.Abstract;
 using CrudApp1.Repository.Concrete;
 using Microsoft.AspNetCore.Identity;
@@ -24,7 +25,7 @@ builder.Services.AddScoped<IProductRepo,ProductRepo>();
 builder.Services.AddScoped<FileService>();
 
 //register identity
-builder.Services.AddIdentity<IdentityUser,IdentityRole>(
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
     options =>
     {
         options.Password.RequireNonAlphanumeric=false;

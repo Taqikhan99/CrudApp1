@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CrudApp1.DAL
 {
-    public class AppDbContext:IdentityDbContext
+    public class AppDbContext:IdentityDbContext<ApplicationUser>
     {
         public AppDbContext(DbContextOptions options) : base(options)
         {

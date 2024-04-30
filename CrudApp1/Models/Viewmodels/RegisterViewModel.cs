@@ -16,5 +16,7 @@ namespace CrudApp1.Models.Viewmodels
         [Display(Name ="Confirm Password")]
         [Compare("Password",ErrorMessage ="Password and Confirm Password must be same")]
         public string ConfirmPassword { get; set; }
+
+        public string City { get; set; }
     }
 }
