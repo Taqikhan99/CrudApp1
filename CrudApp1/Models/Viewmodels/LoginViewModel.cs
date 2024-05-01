@@ -7,7 +7,7 @@ namespace CrudApp1.Models.Viewmodels
     {
         [Required]
         [EmailAddress]
-        [Remote(action: "IsEmailAlreadyInUse", controller:"Account")]
+        
         public string Email { get; set; }
 
         [Required]

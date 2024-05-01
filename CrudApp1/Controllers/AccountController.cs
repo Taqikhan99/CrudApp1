@@ -1,5 +1,6 @@
 ﻿using CrudApp1.Models;
 using CrudApp1.Models.Viewmodels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,7 @@ namespace CrudApp1.Controllers
             this.userManager = userManager;
             this.signInManager = signInManager;
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Register()
         {
@@ -24,7 +25,7 @@ namespace CrudApp1.Controllers
 
             return View();
         }
-
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
         {
@@ -51,13 +52,14 @@ namespace CrudApp1.Controllers
             return View(registerViewModel);
         }
 
-
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel,string returnUrl)
         {
             //check model state
@@ -71,7 +73,7 @@ namespace CrudApp1.Controllers
                 {
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     {
-                        return RedirectToAction(returnUrl);
+                        return Redirect(returnUrl);
                        //or use return LocalRedirect(returnUrl);
                     }
 

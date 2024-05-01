@@ -5,7 +5,9 @@ using CrudApp1.DAL;
 using CrudApp1.Models;
 using CrudApp1.Repository.Abstract;
 using CrudApp1.Repository.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +35,15 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
     }
     )
     .AddEntityFrameworkStores<AppDbContext>();
+
+
+//global authentication
+builder.Services.AddMvc(config =>
+{
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    config.Filters.Add(new AuthorizeFilter(policy));
+});
+
 
 var app = builder.Build();
 

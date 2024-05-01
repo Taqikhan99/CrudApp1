@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace CrudApp1.Models.Viewmodels
 {
@@ -6,6 +7,7 @@ namespace CrudApp1.Models.Viewmodels
     {
         [Required]
         [EmailAddress]
+        [Remote(action: "IsEmailAlreadyInUse", controller: "Account")]
         public string Email { get; set; }
 
         [Required]

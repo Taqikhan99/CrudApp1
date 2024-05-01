@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityRole>
+@{
+    ViewData["Title"] = "GetRoles";
+}
+<div class="container p-3">
+    <h1>GetRoles</h1>
+    @if (Model.Any())
+    {
+        foreach (var role in Model)
+        {
+        <div class="card">
+            <h5 class="card-header">@role.Id</h5>
+            <div class="card-body">
+                <h5 class="card-title">@role.Name</h5>
+                @*<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>*@
+                <a href="#" class="btn btn-primary">Edit</a>
+            </div>
+        </div>
+        }
+    }
+    else
+    {
+        <div class="card">
+            <h5 class="card-header"></h5>
+            <div class="card-body">
+                <h5 class="card-title">No Roles Available</h5>
+                @*<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>*@
+                <a asp-controller="Administration" asp-action="CreateRole" class="btn btn-primary">Create role</a>
+            </div>
+        </div>
+    }
+</div>
