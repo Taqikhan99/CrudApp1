@@ -1,0 +1,49 @@
+﻿@model List<CrudApp1.Models.Viewmodels.UserRolesViewModel>
+@{
+    ViewData["Title"] = "EditUsersInRole";
+
+}
+
+
+@{ 
+    var roleid = ViewBag.roleid;
+}
+<div class="container p-2 mt-5">
+
+    <form method="post">
+
+        <div class="card">
+
+            <div class="card-header">
+                <h3>Add or Remove Users For Role</h3>
+            </div>
+            <div class="card-body">
+
+                @* foreach user display the checkbox and name *@
+                @for (var i = 0; i < Model.Count; i++)
+                {
+                    <div class="form-check">
+
+                        <input class="form-check-input" asp-for="@Model[i].IsSelected">
+                        <label class="form-check-label">
+                            @Model[i].UserName
+                        </label>
+
+
+                    </div>
+                    <input type="hidden" asp-for="@Model[i].UserId" />
+                    <input type="hidden" asp-for="@Model[i].UserName" />
+                }
+
+            </div>
+            <div class="card-footer">
+                <input type="submit" value="Update" class="btn btn-primary" />
+                <a asp-action="EditRole" asp-route-id="@roleid" class="btn btn-danger">Cancel</a>
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
