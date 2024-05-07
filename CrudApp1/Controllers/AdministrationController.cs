@@ -1,10 +1,13 @@
 ﻿using CrudApp1.Models;
 using CrudApp1.Models.Viewmodels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrudApp1.Controllers
 {
+    //lets make this controller accessable for admins only
+    [Authorize(Roles = "Admin,User")]
     public class AdministrationController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;
@@ -136,7 +139,7 @@ namespace CrudApp1.Controllers
 
                 };
                 //check if in role then set isSelected to true else false
-                if(await userManager.IsInRoleAsync(user, roleid))
+                if(await userManager.IsInRoleAsync(user, role.Name))
                 {
                     userRoleVm.IsSelected= true;
                 }

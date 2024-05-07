@@ -33,9 +33,9 @@ namespace CrudApp1.Controllers
             if (ModelState.IsValid)
             {
                 //create user
-                var user = new ApplicationUser { UserName = registerViewModel.Email, Email = registerViewModel.Email,City=registerViewModel.City };
+                var user = new ApplicationUser { UserName = registerViewModel.Email, Email = registerViewModel.Email, City = registerViewModel.City };
                 var res = await userManager.CreateAsync(user, registerViewModel.Password);
-                
+
                 //sign in user if user creation succeed
                 if (res.Succeeded)
                 {
@@ -60,7 +60,7 @@ namespace CrudApp1.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginViewModel loginViewModel,string returnUrl)
+        public async Task<IActionResult> Login(LoginViewModel loginViewModel, string returnUrl)
         {
             //check model state
             if (ModelState.IsValid)
@@ -69,12 +69,12 @@ namespace CrudApp1.Controllers
                 //sign in user
                 var res = await signInManager.PasswordSignInAsync(loginViewModel.Email, loginViewModel.Password, loginViewModel.RememberMe, false);
 
-                if(res.Succeeded)
+                if (res.Succeeded)
                 {
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
-                       //or use return LocalRedirect(returnUrl);
+                        //or use return LocalRedirect(returnUrl);
                     }
 
                     return RedirectToAction("Index", "Home");
@@ -105,20 +105,27 @@ namespace CrudApp1.Controllers
             string suggestion;
             while (suggestions.Count < count)
             {
-                
+
                 suggestion = $"{baseUsername}{new Random().Next(100, 999)}";
-                
+
                 suggestions.Add(suggestion);
             }
             return string.Join(", ", suggestions);
         }
-    
 
-    //signout
-    public async Task<IActionResult> Signout()
+
+        //signout
+        public async Task<IActionResult> Signout()
         {
             await signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+
+        //Access denied page
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
     }
 }
