@@ -3,6 +3,7 @@ using CrudApp1.Models.Viewmodels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace CrudApp1.Controllers
 {
@@ -201,5 +202,95 @@ namespace CrudApp1.Controllers
             return RedirectToAction("EditRole", new { id = roleid });
             
         }
+
+        #region ManageUsers
+        [HttpGet]
+        public IActionResult ListUsers()
+        {
+            var users = userManager.Users.ToList();
+            return View(users);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditUsers(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User With Id: {id} is not found";
+                return View("Error");
+            }
+            //get claims and roles for the user to populate in view model
+            var roles = await userManager.GetRolesAsync(user);
+            var claims= await userManager.GetClaimsAsync(user);
+
+            //initialize view model
+            var model = new EditUserViewModel
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                City = user.City,
+                Roles = roles.ToList(),
+                Claims = claims.Select(x => x.Value).ToList()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditUsers(EditUserViewModel viewModel)
+        {
+            var user = await userManager.FindByIdAsync(viewModel.Id);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User With Id: {viewModel.Id} is not found";
+                return View("Error");
+            }
+            //else update the user props
+            user.Email=viewModel.Email;
+            user.City=viewModel.City;
+            user.UserName=viewModel.UserName;
+            var res = await userManager.UpdateAsync(user);
+
+            if (res.Succeeded)
+            {
+                return RedirectToAction("ListUsers");
+            }
+            //else add errors to  modelstate and return
+            foreach(var e in res.Errors)
+            {
+                ModelState.AddModelError("", e.Description);
+            }
+
+            return View(viewModel);
+        }
+
+
+        //delete user
+        
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User With Id: {id} is not found";
+                return View("Error");
+            }
+
+            var res= await userManager.DeleteAsync(user);
+            if (res.Succeeded)
+            {
+                return RedirectToAction("ListUsers");
+            }
+            foreach (var e in res.Errors)
+            {
+                ModelState.AddModelError("", e.Description);
+            }
+
+            return View("ListUsers");
+        }
+
+        #endregion
     }
 }

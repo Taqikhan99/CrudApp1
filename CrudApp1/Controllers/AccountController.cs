@@ -39,6 +39,11 @@ namespace CrudApp1.Controllers
                 //sign in user if user creation succeed
                 if (res.Succeeded)
                 {
+                    if(signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("ListUsers", "Administration");
+                    }
+
                     await signInManager.SignInAsync(user, isPersistent: false); //we dont want peramant cookie so false.
                     return RedirectToAction("Index", "Home");
 
@@ -92,7 +97,7 @@ namespace CrudApp1.Controllers
         public async Task<IActionResult> IsEmailAlreadyInUse(string email)
         {
             //get the user from db with email passed
-            var user = userManager.FindByEmailAsync(email);
+            var user = await userManager.FindByEmailAsync(email);
             if (user == null)
             {
                 return Json(true);
