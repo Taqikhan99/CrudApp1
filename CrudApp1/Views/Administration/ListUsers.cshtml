@@ -24,7 +24,8 @@
                     
                     <form method="post">
                         <a asp-action="EditUsers" asp-controller="Administration" asp-route-id="@u.Id" class="btn btn-primary">Edit</a>
-                        <a asp-action="DeleteUser" asp-controller="Administration" asp-route-id="@u.Id" class="btn btn-danger">Delete</a>
+                        <a asp-action="DeleteUser" asp-controller="Administration" asp-route-id="@u.Id" data-item-id="@u.Id"
+                           data-user-name="@u.UserName" class="btn deleteButton btn-danger">Delete</a>
 
                     </form>
                 </div>
@@ -33,3 +34,35 @@
     }
 
 </div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        $('.deleteButton').click(function (event) {
+            event.preventDefault(); // Prevent default behavior
+        var itemId = $(this).data('item-id');
+        var username = $(this).data('user-name');
+
+        // Show SweetAlert2 confirmation dialog
+        Swal.fire({
+            title: "Are you sure to delete user: " + username,
+            
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Delete!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Perform the delete action
+                // You can redirect to the delete action in your controller
+                // or perform an AJAX call to delete the item
+                // For example, redirect to the delete action
+                window.location.href = '@Url.Action("DeleteUser", "Administration")' + '?id=' + itemId;
+            }
+        });
+    });
+});
+
+</script>

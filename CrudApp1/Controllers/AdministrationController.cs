@@ -3,6 +3,7 @@ using CrudApp1.Models.Viewmodels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace CrudApp1.Controllers
@@ -13,39 +14,52 @@ namespace CrudApp1.Controllers
     {
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly ILogger<AdministrationController> logger;
 
-        public AdministrationController(RoleManager<IdentityRole> roleManager,UserManager<ApplicationUser> userManager)
+        public AdministrationController(RoleManager<IdentityRole> roleManager,UserManager<ApplicationUser> userManager,ILogger<AdministrationController> logger)
         {
             this.roleManager = roleManager;
             this.userManager = userManager;
+            this.logger = logger;
         }
         public IActionResult CreateRole()
         {
+            logger.LogInformation("Getting to Create Role");
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateRole(CreateRoleViewModel createRoleView)
         {
-            if (ModelState.IsValid)
+            try
             {
-                IdentityRole role = new IdentityRole { Name = createRoleView.RoleName };
-
-                //create Role
-                IdentityResult res = await roleManager.CreateAsync(role);
-                if (res.Succeeded)
+                if (ModelState.IsValid)
                 {
-                    return RedirectToAction("GetRoles", "Administration");
-                }
-                //add errors to modelstate
-                foreach(IdentityError error in res.Errors)
-                {
-                    ModelState.AddModelError("", error.Description);
-                }
+                    IdentityRole role = new IdentityRole { Name = createRoleView.RoleName };
+
+                    //create Role
+                    IdentityResult res = await roleManager.CreateAsync(role);
+                    if (res.Succeeded)
+                    {
+                        logger.LogInformation("Created New Role Successfully");
+                        return RedirectToAction("GetRoles", "Administration");
+                    }
+                    //add errors to modelstate
+                    foreach (IdentityError error in res.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
 
 
+                }
+                return View(createRoleView);
             }
-            return View(createRoleView);
+            catch(Exception ex)
+            {
+                logger.LogError("Create Role Failed. Fail Time:  "+DateTime.Now);
+                ViewBag.ErrorMessage=ex.Message;
+                return View("Error");
+            }
         }
         [HttpGet]
         public IActionResult GetRoles()
@@ -115,6 +129,47 @@ namespace CrudApp1.Controllers
 
             return View(roleViewModel);
         }
+
+        //Delete Role
+        public async Task<IActionResult> DeleteRole(string id)
+        {
+            var role = await roleManager.FindByIdAsync(id);
+            try
+            {
+                
+                if (role == null)
+                {
+                    ViewBag.ErrorMessage = $"Role With Id: {id} is not found";
+                    return View("Error");
+                }
+
+                var res = await roleManager.DeleteAsync(role);
+                if (res.Succeeded)
+                {
+                    logger.LogInformation("Delete Role Success. Time:  " + DateTime.Now);
+                    return RedirectToAction("GetRoles");
+                }
+                foreach (var e in res.Errors)
+                {
+                    ModelState.AddModelError("", e.Description);
+                }
+
+                return View("GetRoles");
+            }
+            catch(DbUpdateException ex)
+            {
+                logger.LogError("Delete Role Failed. Fail Time:  " + DateTime.Now);
+                ViewBag.ErrorMessage = @$"{role.Name} role is in use by users and cannot be deleted!  ";
+                return View("Error");
+            }
+            catch(Exception ex)
+            {
+                logger.LogError("Delete Role Failed. Fail Time:  " + DateTime.Now);
+                ViewBag.ErrorMessage=ex.Message;
+                return View("Error");
+            }
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> EditUsersInRole(string roleid)

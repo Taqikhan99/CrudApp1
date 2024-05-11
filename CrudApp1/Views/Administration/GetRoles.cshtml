@@ -14,7 +14,8 @@
                 <h5 class="card-title">@role.Name</h5>
                 @*<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>*@
                 <a asp-controller="Administration" asp-action="EditRole" asp-route-id="@role.Id" class="btn btn-primary">Edit</a>
-                <a href="#" class="btn btn-danger">Delete</a>
+                <a asp-controller="Administration" asp-action="DeleteRole" asp-route-id="@role.Id" 
+                   data-item-id="@role.Id" data-role-name="@role.Name" class="deleteButton btn btn-danger">Delete</a>
             </div>
         </div>
         }
@@ -31,3 +32,33 @@
         </div>
     }
 </div>
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        $('.deleteButton').click(function (event) {
+            event.preventDefault(); // Prevent default behavior
+        var itemId = $(this).data('item-id');
+            var rolename = $(this).data('role-name');
+
+        // Show SweetAlert2 confirmation dialog
+        Swal.fire({
+            title: "Are you sure to delete role: " + rolename,
+
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Delete!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Perform the delete action
+                // You can redirect to the delete action in your controller
+                // or perform an AJAX call to delete the item
+                // For example, redirect to the delete action
+                window.location.href = '@Url.Action("DeleteRole", "Administration")' + '?id=' + itemId;
+            }
+        });
+    });
+    });
+</script>

@@ -15,6 +15,13 @@ namespace CrudApp1.DAL
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            //by default ef core has cascading behavior e.g if rec delete from parent table, its dependent recs in child table are also deleted.
+            //we change here to Restrict(No Action). Now must be deleted from child table first.
+            foreach(var fk in builder.Model.GetEntityTypes().SelectMany(x => x.GetForeignKeys())){
+                fk.DeleteBehavior = DeleteBehavior.Restrict;
+            }
+
         }
     }
 }

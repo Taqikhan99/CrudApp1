@@ -6,7 +6,7 @@ namespace CrudApp1.Controllers
     public abstract class BaseController : Controller
     {
 
-
+        
         public void Alert(string message, NotificationType notificationType)
         {
        
