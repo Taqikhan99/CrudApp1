@@ -1,13 +1,11 @@
-﻿@model List<CrudApp1.Models.Viewmodels.UsersInRoleViewModel>
+﻿@model List<CrudApp1.Models.Viewmodels.UserRolesViewModel>
 @{
-    ViewData["Title"] = "EditUsersInRole";
-
+    ViewData["Title"] = "ManageUserRoles";
+    var userid = ViewBag.userid;
 }
 
+<h1>ManageUserRoles</h1>
 
-@{ 
-    var roleid = ViewBag.roleid;
-}
 <div class="container p-2 mt-5">
 
     <form method="post">
@@ -15,7 +13,7 @@
         <div class="card">
 
             <div class="card-header">
-                <h3>Add or Remove Users For Role</h3>
+                <h3>Add or Remove Roles For User</h3>
             </div>
             <div class="card-body">
 
@@ -26,19 +24,19 @@
 
                         <input class="form-check-input" asp-for="@Model[i].IsSelected">
                         <label class="form-check-label">
-                            @Model[i].UserName
+                            @Model[i].RoleName
                         </label>
 
 
                     </div>
-                    <input type="hidden" asp-for="@Model[i].UserId" />
-                    <input type="hidden" asp-for="@Model[i].UserName" />
+                    <input type="hidden" asp-for="@Model[i].RoleId" />
+                    <input type="hidden" asp-for="@Model[i].RoleName" />
                 }
 
             </div>
             <div class="card-footer">
                 <input type="submit" value="Update" class="btn btn-primary" />
-                <a asp-action="EditRole" asp-route-id="@roleid" class="btn btn-danger">Cancel</a>
+                <a asp-action="EditUsers" asp-route-id="@userid" class="btn btn-danger">Cancel</a>
             </div>
 
         </div>

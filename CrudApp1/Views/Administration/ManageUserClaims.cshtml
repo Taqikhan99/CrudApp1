@@ -1,0 +1,37 @@
+﻿@model CrudApp1.Models.Viewmodels.UserClaimsViewModel
+@{
+    ViewData["Title"] = "ManageUserClaims";
+}
+
+
+<div class="container p-2 mt-5">
+
+    <form method="post">
+
+        <div class="card">
+
+            <div class="card-header">
+                <h3>Manage User Claims</h3>
+            </div>
+            <div class="card-body">
+                @*  loop through each claim we have *@
+                @for(int i = 0; i < Model.Claims.Count; i++)
+            {
+                <div class="form-check m-1">
+                    <input asp-for="@Model.Claims[i].IsSelected" class="form-check-input"/>
+                    <label class="form-check-label" asp-for="@Model.Claims[i].IsSelected" >@Model.Claims[i].ClaimType</label>
+                </div>
+            }
+
+            </div>
+            <div class="card-footer">
+                <input type="submit" value="Update" class="btn btn-primary" />
+                <a asp-action="EditUsers" asp-route-id="@Model.UserId" class="btn btn-danger">Cancel</a>
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
