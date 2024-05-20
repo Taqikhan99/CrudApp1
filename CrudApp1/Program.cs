@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -36,6 +37,20 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
     )
     .AddEntityFrameworkStores<AppDbContext>();
 
+//adding google authentication
+builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+});
+
+
+//adding policy
+builder.Services.AddAuthorization(opt =>
+{
+    opt.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role"));
+});
+
 
 //global authentication
 builder.Services.AddMvc(config =>
@@ -43,6 +58,9 @@ builder.Services.AddMvc(config =>
     var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
     config.Filters.Add(new AuthorizeFilter(policy));
 });
+
+
+
 
 
 var app = builder.Build();

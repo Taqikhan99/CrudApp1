@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace CrudApp1.Models.Viewmodels
@@ -16,5 +17,9 @@ namespace CrudApp1.Models.Viewmodels
 
         [Display(Name ="Remember Me")]
         public bool RememberMe { get; set;}
+
+        public string? ReturnUrl { get; set;}
+
+        public List<AuthenticationScheme> ExternalLogins { get; set;}
     }
 }

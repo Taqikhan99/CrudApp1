@@ -9,11 +9,11 @@
     <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-   
+
     <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
-    
+
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
- 
+
     @*<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>*@
 
 </head>
@@ -44,19 +44,50 @@
 
 
                 </div><div class="row mb-3 ">
-                          <div>
-                              <input asp-for="RememberMe" />
-                              @Html.DisplayNameFor(m => m.RememberMe)
-                          </div>
+                    <div>
+                        <input asp-for="RememberMe" />
+                        @Html.DisplayNameFor(m => m.RememberMe)
+                    </div>
                 </div>
 
                 <div class="mt-5">
 
-                    <input type="submit" value="Login" class="btn text-center form-control btn-primary p-2 text-light" />
+                    <input type="submit" value="Login" class="btn text-center form-control btn-primary p-2 text-light mb-3" />
+
+
+
 
                 </div>
 
             </form>
+            @if (Model.ExternalLogins.Count == 0)
+            {
+
+
+                <p>No External Logins Configured!</p>
+            }
+            else
+            {
+                <form method="post" asp-action="ExternalLogin" asp-route-returnurl="@Model.ReturnUrl">
+                    @foreach (var provider in Model.ExternalLogins)
+                    {
+
+
+
+                        @if (provider.Name == "Google")
+                        {
+                            <button type="submit" class="btn btn-primary form-control mb-3" name="provider" value="@provider.Name">
+                                <img src="~/Images/google.png" style="width:30px"  title="@provider.DisplayName"/>
+                                @provider.DisplayName
+                            </button>
+                        }
+
+
+                    }
+                </form>
+
+
+            }
 
         </div>
 

@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityRole>
+
+@inject Microsoft.AspNetCore.Authorization.IAuthorizationService authService
 @{
     ViewData["Title"] = "GetRoles";
 }
@@ -14,8 +16,14 @@
                 <h5 class="card-title">@role.Name</h5>
                 @*<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>*@
                 <a asp-controller="Administration" asp-action="EditRole" asp-route-id="@role.Id" class="btn btn-primary">Edit</a>
-                <a asp-controller="Administration" asp-action="DeleteRole" asp-route-id="@role.Id" 
-                   data-item-id="@role.Id" data-role-name="@role.Name" class="deleteButton btn btn-danger">Delete</a>
+
+
+                @if ((await authService.AuthorizeAsync(User, "", "DeleteRolePolicy")).Succeeded)
+                {
+                    <a asp-controller="Administration" asp-action="DeleteRole" asp-route-id="@role.Id"
+                       data-item-id="@role.Id" data-role-name="@role.Name" class="deleteButton btn btn-danger">Delete</a>
+                }
+
             </div>
         </div>
         }

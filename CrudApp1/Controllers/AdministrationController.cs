@@ -17,7 +17,7 @@ namespace CrudApp1.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<AdministrationController> logger;
 
-        public AdministrationController(RoleManager<IdentityRole> roleManager,UserManager<ApplicationUser> userManager,ILogger<AdministrationController> logger)
+        public AdministrationController(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, ILogger<AdministrationController> logger)
         {
             this.roleManager = roleManager;
             this.userManager = userManager;
@@ -55,10 +55,10 @@ namespace CrudApp1.Controllers
                 }
                 return View(createRoleView);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                logger.LogError("Create Role Failed. Fail Time:  "+DateTime.Now);
-                ViewBag.ErrorMessage=ex.Message;
+                logger.LogError("Create Role Failed. Fail Time:  " + DateTime.Now);
+                ViewBag.ErrorMessage = ex.Message;
                 return View("Error");
             }
         }
@@ -75,8 +75,8 @@ namespace CrudApp1.Controllers
         {
 
             var role = await roleManager.FindByIdAsync(id);
-            
-            if(role == null)
+
+            if (role == null)
             {
                 ViewBag.ErrorMessage = $"Role With Id: {id} is not found";
                 return View("Error");
@@ -88,9 +88,9 @@ namespace CrudApp1.Controllers
                 Name = role.Name,
             };
 
-            foreach(var user in userManager.Users.ToList())
+            foreach (var user in userManager.Users.ToList())
             {
-                if(await userManager.IsInRoleAsync(user, role.Name))
+                if (await userManager.IsInRoleAsync(user, role.Name))
                 {
                     model.UsersInRole.Add(user.UserName);
                 }
@@ -115,14 +115,14 @@ namespace CrudApp1.Controllers
             else
             {
                 role.Name = roleViewModel.Name;
-                var res= await roleManager.UpdateAsync(role);
+                var res = await roleManager.UpdateAsync(role);
 
                 if (res.Succeeded)
                 {
                     return RedirectToAction("GetRoles");
                 }
 
-                foreach(var error in res.Errors)
+                foreach (var error in res.Errors)
                 {
                     ModelState.AddModelError("", error.Description);
                 }
@@ -132,12 +132,13 @@ namespace CrudApp1.Controllers
         }
 
         //Delete Role
+        [Authorize(Policy = "DeleteRolePolicy")]
         public async Task<IActionResult> DeleteRole(string id)
         {
             var role = await roleManager.FindByIdAsync(id);
             try
             {
-                
+
                 if (role == null)
                 {
                     ViewBag.ErrorMessage = $"Role With Id: {id} is not found";
@@ -157,16 +158,16 @@ namespace CrudApp1.Controllers
 
                 return View("GetRoles");
             }
-            catch(DbUpdateException ex)
+            catch (DbUpdateException ex)
             {
                 logger.LogError("Delete Role Failed. Fail Time:  " + DateTime.Now);
                 ViewBag.ErrorMessage = @$"{role.Name} role is in use by users and cannot be deleted!  ";
                 return View("Error");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.LogError("Delete Role Failed. Fail Time:  " + DateTime.Now);
-                ViewBag.ErrorMessage=ex.Message;
+                ViewBag.ErrorMessage = ex.Message;
                 return View("Error");
             }
         }
@@ -177,17 +178,17 @@ namespace CrudApp1.Controllers
         {
             var role = await roleManager.FindByIdAsync(roleid);
 
-            if(role == null)
+            if (role == null)
             {
                 ViewBag.ErrorMessage = $"Role With Id: {roleid} is not found";
                 return View("Error");
             }
 
-            ViewBag.roleid=roleid;
+            ViewBag.roleid = roleid;
 
             var model = new List<UsersInRoleViewModel>();
 
-            foreach(var user in userManager.Users.ToList())
+            foreach (var user in userManager.Users.ToList())
             {
                 var userRoleVm = new UsersInRoleViewModel
                 {
@@ -196,13 +197,13 @@ namespace CrudApp1.Controllers
 
                 };
                 //check if in role then set isSelected to true else false
-                if(await userManager.IsInRoleAsync(user, role.Name))
+                if (await userManager.IsInRoleAsync(user, role.Name))
                 {
-                    userRoleVm.IsSelected= true;
+                    userRoleVm.IsSelected = true;
                 }
                 else
                 {
-                    userRoleVm.IsSelected= false;
+                    userRoleVm.IsSelected = false;
                 }
 
                 model.Add(userRoleVm);
@@ -213,7 +214,7 @@ namespace CrudApp1.Controllers
 
         //post method for edituserinrole
         [HttpPost]
-        public async Task<IActionResult> EditUsersInRole(List<UsersInRoleViewModel> model,string roleid)
+        public async Task<IActionResult> EditUsersInRole(List<UsersInRoleViewModel> model, string roleid)
         {
             var role = await roleManager.FindByIdAsync(roleid);
             //if role is null then redirect to error page
@@ -233,11 +234,11 @@ namespace CrudApp1.Controllers
                 //add to role if checked andnot already assigned
                 if (model[i].IsSelected && !await userManager.IsInRoleAsync(user, role.Name))
                 {
-                    res= await userManager.AddToRoleAsync(user,role.Name);
+                    res = await userManager.AddToRoleAsync(user, role.Name);
                 }
-                else if(!model[i].IsSelected && await userManager.IsInRoleAsync(user, role.Name))
+                else if (!model[i].IsSelected && await userManager.IsInRoleAsync(user, role.Name))
                 {
-                    res= await userManager.RemoveFromRoleAsync(user,role.Name);
+                    res = await userManager.RemoveFromRoleAsync(user, role.Name);
                 }
                 else
                 {
@@ -256,7 +257,7 @@ namespace CrudApp1.Controllers
             }
 
             return RedirectToAction("EditRole", new { id = roleid });
-            
+
         }
 
         #region ManageUsers
@@ -278,7 +279,7 @@ namespace CrudApp1.Controllers
             }
             //get claims and roles for the user to populate in view model
             var roles = await userManager.GetRolesAsync(user);
-            var claims= await userManager.GetClaimsAsync(user);
+            var claims = await userManager.GetClaimsAsync(user);
 
             //initialize view model
             var model = new EditUserViewModel
@@ -304,9 +305,9 @@ namespace CrudApp1.Controllers
                 return View("Error");
             }
             //else update the user props
-            user.Email=viewModel.Email;
-            user.City=viewModel.City;
-            user.UserName=viewModel.UserName;
+            user.Email = viewModel.Email;
+            user.City = viewModel.City;
+            user.UserName = viewModel.UserName;
             var res = await userManager.UpdateAsync(user);
 
             if (res.Succeeded)
@@ -314,7 +315,7 @@ namespace CrudApp1.Controllers
                 return RedirectToAction("ListUsers");
             }
             //else add errors to  modelstate and return
-            foreach(var e in res.Errors)
+            foreach (var e in res.Errors)
             {
                 ModelState.AddModelError("", e.Description);
             }
@@ -324,7 +325,7 @@ namespace CrudApp1.Controllers
 
 
         //delete user
-        
+
         public async Task<IActionResult> DeleteUser(string id)
         {
             var user = await userManager.FindByIdAsync(id);
@@ -334,7 +335,7 @@ namespace CrudApp1.Controllers
                 return View("Error");
             }
 
-            var res= await userManager.DeleteAsync(user);
+            var res = await userManager.DeleteAsync(user);
             if (res.Succeeded)
             {
                 return RedirectToAction("ListUsers");
@@ -359,13 +360,13 @@ namespace CrudApp1.Controllers
                 return View("Error");
             }
 
-            ViewBag.userid=userid; 
+            ViewBag.userid = userid;
             //create model and display all the roles on page if contain then isselected = true else false
             var model = new List<UserRolesViewModel>();
 
-            foreach(var role in roleManager.Roles.ToList())
+            foreach (var role in roleManager.Roles.ToList())
             {
-                var userRoleVm =new UserRolesViewModel {  RoleId = role.Id, RoleName = role.Name };
+                var userRoleVm = new UserRolesViewModel { RoleId = role.Id, RoleName = role.Name };
                 //check if in role then set isSelected to true else false
                 if (await userManager.IsInRoleAsync(user, role.Name))
                 {
@@ -381,12 +382,12 @@ namespace CrudApp1.Controllers
 
             return View(model);
 
-            
+
 
         }
 
         [HttpPost]
-        public async Task<IActionResult> ManageUserRoles(List<UserRolesViewModel> model ,string userid)
+        public async Task<IActionResult> ManageUserRoles(List<UserRolesViewModel> model, string userid)
         {
 
             var user = await userManager.FindByIdAsync(userid);
@@ -417,6 +418,7 @@ namespace CrudApp1.Controllers
         }
 
         //Claims
+        [HttpGet]
         public async Task<IActionResult> ManageUserClaims(string userid)
         {
             var user = await userManager.FindByIdAsync(userid);
@@ -436,7 +438,7 @@ namespace CrudApp1.Controllers
 
 
             //traverse through claims in claimstore
-            foreach(Claim claim in ClaimsStore.claims)
+            foreach (Claim claim in ClaimsStore.claims)
             {
                 UserClaim userClaim = new UserClaim
                 {
@@ -444,22 +446,51 @@ namespace CrudApp1.Controllers
                 };
 
                 //if user has the claim set isSelected to true
-                if(existingClaims.Any(x=>x.Type == claim.Type))
+                if (existingClaims.Any(x => x.Type == claim.Type))
                 {
-                    userClaim.IsSelected=true;
+                    userClaim.IsSelected = true;
                 }
                 model.Claims.Add(userClaim);
 
             }
             return View(model);
-
-
-
-
         }
 
 
+        [HttpPost]
+        public async Task<IActionResult> ManageUserClaims(UserClaimsViewModel viewModel)
+        {
+            var user = await userManager.FindByIdAsync(viewModel.UserId);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User With Id: {viewModel.UserId} is not found";
+                return View("Error");
+            }
+            //get existing claims and delete first
+            var claims = await userManager.GetClaimsAsync(user);
+            var res = await userManager.RemoveClaimsAsync(user, claims);
 
-            #endregion
+            if (!res.Succeeded)
+            {
+                ModelState.AddModelError("", "Cannot remove claims");
+                return View(viewModel);
+            }
+
+            //select the roles user has checked and save
+            res = await userManager.AddClaimsAsync(user, viewModel.Claims.Where(y => y.IsSelected).Select(y =>new Claim(y.ClaimType,y.ClaimType)).ToList());
+            if (!res.Succeeded)
+            {
+                ModelState.AddModelError("", "Cannot remove claims");
+                return View(viewModel);
+            }
+            return RedirectToAction("EditUsers", new { id = viewModel.UserId });
+
         }
+
+        #endregion
+    }
+
+    
+
+
 }
